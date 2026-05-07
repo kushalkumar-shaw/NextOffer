@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Job - NextOffer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Edit Job: {{ job.title }}</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <form method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            <label class="form-label">Job Title</label>
+                            {{ form.title(class="form-control form-control-lg") }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Job Description</label>
+                            {{ form.description(class="form-control", rows="6") }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Requirements</label>
+                            {{ form.requirements(class="form-control", rows="4") }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Job Type</label>
+                                {{ form.job_type(class="form-select") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Experience Required</label>
+                                {{ form.experience_required(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Salary Min</label>
+                                {{ form.salary_min(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Salary Max</label>
+                                {{ form.salary_max(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Location</label>
+                                {{ form.location(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Deadline</label>
+                                {{ form.deadline(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Required Skills</label>
+                            {{ form.skills_required(class="form-control") }}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

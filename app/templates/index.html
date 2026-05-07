@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}NextOffer - Land Your Dream Job{% endblock %}
+
+{% block content %}
+<div class="hero-section py-5" style="background: linear-gradient(135deg, #0A1628 0%, #2563EB 100%);">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-white mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-3">Land Your Dream Job</h1>
+                <p class="lead mb-4">Discover opportunities from top companies and showcase your skills to the world.</p>
+                {% if not current_user.is_authenticated %}
+                    <div class="btn-group gap-3">
+                        <a href="{{ url_for('main.browse_jobs') }}" class="btn btn-light btn-lg">
+                            <i class="bi bi-search me-2"></i>Find Jobs
+                        </a>
+                        <a href="{{ url_for('auth.register_candidate') }}" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Join Now
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{{ url_for('main.browse_jobs') }}" class="btn btn-light btn-lg">
+                        <i class="bi bi-search me-2"></i>Browse Jobs
+                    </a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <form class="search-form" method="get" action="{{ url_for('main.browse_jobs') }}" class="mb-0">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" name="search" placeholder="Job title, keywords...">
+                        <button class="btn btn-warning" type="submit">
+                            <i class="bi bi-search"></i>Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Platform Stats</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card text-center border-0 shadow-sm" style="background: linear-gradient(135deg, #2563EB 0%, #1e40af 100%); color: white;">
+                    <div class="card-body p-4">
+                        <h3 class="card-title display-6">{{ total_jobs }}</h3>
+                        <p class="card-text">Active Job Postings</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center border-0 shadow-sm" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">
+                    <div class="card-body p-4">
+                        <h3 class="card-title display-6">{{ total_companies }}</h3>
+                        <p class="card-text">Hiring Companies</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center border-0 shadow-sm" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;">
+                    <div class="card-body p-4">
+                        <h3 class="card-title display-6">1000+</h3>
+                        <p class="card-text">Success Stories</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Featured Job Opportunities</h2>
+        <div class="row g-4">
+            {% for job in featured_jobs %}
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100 hover-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h5 class="card-title">{{ job.title }}</h5>
+                                    <p class="text-muted mb-0">
+                                        <i class="bi bi-building me-1"></i>{{ job.company.company_name }}
+                                    </p>
+                                </div>
+                                <span class="badge bg-primary">{{ job.job_type }}</span>
+                            </div>
+                            <p class="card-text small text-muted mb-2">
+                                <i class="bi bi-geo-alt me-1"></i>{{ job.location }}
+                            </p>
+                            <p class="card-text text-truncate">{{ job.description[:100] }}...</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                {% if job.salary_min and job.salary_max %}
+                                    <small class="text-muted">
+                                        ${{ "{:,.0f}".format(job.salary_min) }} - ${{ "{:,.0f}".format(job.salary_max) }}
+                                    </small>
+                                {% endif %}
+                                <a href="{{ url_for('main.job_detail', job_id=job.id) }}" class="btn btn-sm btn-outline-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <a href="{{ url_for('main.browse_jobs') }}" class="btn btn-primary btn-lg">View All Jobs</a>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">How It Works</h2>
+        <div class="row g-4">
+            <div class="col-lg-6 mb-4">
+                <h4 class="mb-4">For Candidates</h4>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="d-flex gap-3">
+                            <div class="badge bg-primary rounded-pill" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">1</div>
+                            <div>
+                                <h6>Create Your Profile</h6>
+                                <p class="text-muted small">Build a comprehensive profile showcasing your skills and experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex gap-3">
+                            <div class="badge bg-primary rounded-pill" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">2</div>
+                            <div>
+                                <h6>Browse & Apply</h6>
+                                <p class="text-muted small">Search through thousands of job openings and apply with a single click.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex gap-3">
+                            <div class="badge bg-primary rounded-pill" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">3</div>
+                            <div>
+                                <h6>Get Hired</h6>
+                                <p class="text-muted small">Connect with employers and land your dream job today.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h4 class="mb-4">For Companies</h4>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="d-flex gap-3">
+                            <div class="badge bg-success rounded-pill" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">1</div>
+                            <div>
+                                <h6>Post a Job</h6>
+                                <p class="text-muted small">Create a job posting and reach thousands of qualified candidates.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex gap-3">
+                            <div class="badge bg-success rounded-pill" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">2</div>
+                            <div>
+                                <h6>Review Applications</h6>
+                                <p class="text-muted small">Shortlist and review applicants directly through our platform.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex gap-3">
+                            <div class="badge bg-success rounded-pill" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">3</div>
+                            <div>
+                                <h6>Hire Top Talent</h6>
+                                <p class="text-muted small">Make offers and manage the hiring process efficiently.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to Get Started?</h2>
+        <div class="btn-group gap-3">
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.register_candidate') }}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-person-check me-2"></i>Apply for Jobs
+                </a>
+                <a href="{{ url_for('auth.register_company') }}" class="btn btn-success btn-lg">
+                    <i class="bi bi-briefcase me-2"></i>Post a Job
+                </a>
+            {% else %}
+                <a href="{{ url_for('main.browse_jobs') }}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-search me-2"></i>Browse Jobs
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

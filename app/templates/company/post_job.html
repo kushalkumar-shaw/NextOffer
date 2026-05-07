@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Post a Job - NextOffer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Post a New Job</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <form method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-4">
+                            <h5>Job Details</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Job Title</label>
+                                {{ form.title(class="form-control form-control-lg") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Job Description</label>
+                            {{ form.description(class="form-control", rows="6") }}
+                            <small class="text-muted">Describe the role, responsibilities, and what you're looking for.</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Requirements</label>
+                            {{ form.requirements(class="form-control", rows="4") }}
+                            <small class="text-muted">List key requirements and qualifications.</small>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Job Type</label>
+                                {{ form.job_type(class="form-select form-select-lg") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Experience Required</label>
+                                {{ form.experience_required(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Salary Min</label>
+                                {{ form.salary_min(class="form-control", placeholder="$") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Salary Max</label>
+                                {{ form.salary_max(class="form-control", placeholder="$") }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Location</label>
+                                {{ form.location(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Application Deadline</label>
+                                {{ form.deadline(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Required Skills (comma-separated)</label>
+                            {{ form.skills_required(class="form-control") }}
+                            <small class="text-muted">e.g., Python, React, AWS, SQL</small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

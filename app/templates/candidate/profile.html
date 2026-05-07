@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - NextOffer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">My Profile</h1>
+
+    <div class="row g-4">
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body p-4">
+                    {% if profile.profile_pic %}
+                        <img src="{{ url_for('static', filename='uploads/' + profile.profile_pic) }}" alt="Profile" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-light rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                            <i class="bi bi-person" style="font-size: 3rem; color: #ccc;"></i>
+                        </div>
+                    {% endif %}
+                    <h5>{{ current_user.name }}</h5>
+                    <p class="text-muted small">{{ current_user.email }}</p>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">Profile Sections</h6>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('candidate.profile') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person me-2"></i>Personal Info
+                    </a>
+                    <a href="{{ url_for('candidate.education') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-book me-2"></i>Education
+                    </a>
+                    <a href="{{ url_for('candidate.experience') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-briefcase me-2"></i>Experience
+                    </a>
+                    <a href="{{ url_for('candidate.skills') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-star me-2"></i>Skills
+                    </a>
+                    <a href="{{ url_for('candidate.projects') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-diagram-3 me-2"></i>Projects
+                    </a>
+                    <a href="{{ url_for('candidate.awards') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-award me-2"></i>Awards
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0">Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            <label class="form-label">Profile Picture</label>
+                            <input type="file" class="form-control" name="profile_pic" accept="image/*">
+                            <small class="text-muted">PNG, JPG or GIF (Max 5MB)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            {{ form.phone(class="form-control") }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            {{ form.location(class="form-control") }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Bio</label>
+                            {{ form.bio(class="form-control", rows="4") }}
+                            <small class="text-muted">Tell us about yourself (max 1000 characters)</small>
+                        </div>
+
+                        {{ form.submit(class="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Register as Company - NextOffer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-2">
+                        <i class="bi bi-briefcase-fill me-2" style="color: #2563EB;"></i>Register as Company
+                    </h2>
+                    <p class="text-center text-muted mb-4">Post jobs and hire top talent</p>
+
+                    <form method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.name(class="form-control form-control-lg", placeholder="Contact Person Name") }}
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.name.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.company_name(class="form-control form-control-lg", placeholder="Company Name") }}
+                            {% if form.company_name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.company_name.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.email(class="form-control form-control-lg", placeholder="Company Email") }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.email.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.password(class="form-control form-control-lg", placeholder="Password") }}
+                            {% if form.password.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.password.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.confirm_password(class="form-control form-control-lg", placeholder="Confirm Password") }}
+                            {% if form.confirm_password.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.confirm_password.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-success btn-lg w-100">Register Company</button>
+                    </form>
+
+                    <hr class="my-4">
+                    <p class="text-center mb-0">
+                        Already have an account?
+                        <a href="{{ url_for('auth.login') }}">Login here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

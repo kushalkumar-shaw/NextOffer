@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Jobs - NextOffer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Browse Job Opportunities</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <form method="get" action="{{ url_for('main.browse_jobs') }}" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="search" placeholder="Job title or keywords" value="{{ search }}">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="location" placeholder="Location" value="{{ location }}">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="job_type">
+                        <option value="">All Types</option>
+                        <option value="full-time" {% if job_type == 'full-time' %}selected{% endif %}>Full-time</option>
+                        <option value="part-time" {% if job_type == 'part-time' %}selected{% endif %}>Part-time</option>
+                        <option value="internship" {% if job_type == 'internship' %}selected{% endif %}>Internship</option>
+                        <option value="remote" {% if job_type == 'remote' %}selected{% endif %}>Remote</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if jobs.items %}
+        <div class="row g-4">
+            {% for job in jobs.items %}
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm hover-card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5 class="card-title mb-1">{{ job.title }}</h5>
+                                    <p class="text-muted mb-2">
+                                        <i class="bi bi-building me-1"></i>{{ job.company.company_name }}
+                                    </p>
+                                    <p class="card-text mb-2">{{ job.description[:150] }}...</p>
+                                    <div class="mb-2">
+                                        <span class="badge bg-info">{{ job.job_type }}</span>
+                                        <span class="badge bg-secondary">{{ job.experience_required or 'Not specified' }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-md-end">
+                                    <p class="text-muted mb-2">
+                                        <i class="bi bi-geo-alt me-1"></i>{{ job.location }}
+                                    </p>
+                                    {% if job.salary_min and job.salary_max %}
+                                        <p class="fw-bold mb-3">
+                                            ${{ "{:,.0f}".format(job.salary_min) }} - ${{ "{:,.0f}".format(job.salary_max) }}
+                                        </p>
+                                    {% endif %}
+                                    <a href="{{ url_for('main.job_detail', job_id=job.id) }}" class="btn btn-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if jobs.pages > 1 %}
+            <nav aria-label="Page navigation" class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if jobs.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.browse_jobs', page=jobs.prev_num, search=search, location=location, job_type=job_type) }}">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    {% for page_num in jobs.iter_pages() %}
+                        {% if page_num %}
+                            {% if page_num == jobs.page %}
+                                <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('main.browse_jobs', page=page_num, search=search, location=location, job_type=job_type) }}">{{ page_num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if jobs.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.browse_jobs', page=jobs.next_num, search=search, location=location, job_type=job_type) }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info text-center py-5">
+            <h5>No jobs found</h5>
+            <p>Try adjusting your search criteria.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

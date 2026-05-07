@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Job Applications - NextOffer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Applications for {{ job.title }}</h1>
+
+    {% if applications %}
+        <div class="row g-3">
+            {% for app in applications %}
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <h5 class="card-title mb-1">{{ app.candidate.name }}</h5>
+                                    <p class="text-muted mb-2">
+                                        <i class="bi bi-envelope me-1"></i>{{ app.candidate.email }}
+                                    </p>
+                                    <p class="text-muted small">
+                                        Applied: {{ app.applied_at.strftime('%B %d, %Y') }}
+                                    </p>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="d-flex justify-content-end gap-2 align-items-center">
+                                        <span class="badge bg-{% if app.status == 'hired' %}success{% elif app.status == 'shortlisted' %}info{% elif app.status == 'rejected' %}danger{% else %}secondary{% endif %}">
+                                            {{ app.status }}
+                                        </span>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url_for('company.view_candidate', app_id=app.id) }}" class="btn btn-sm btn-outline-primary">View Profile</a>
+                                            <div class="btn-group dropstart" role="group">
+                                                <button id="btnGroupDrop{{ app.id }}" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Update Status
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop{{ app.id }}">
+                                                    <li>
+                                                        <form method="POST" action="{{ url_for('company.update_application_status', app_id=app.id) }}" style="display:inline;">
+                                                            <input type="hidden" name="status" value="shortlisted">
+                                                            <button type="submit" class="dropdown-item">Shortlist</button>
+                                                        </form>
+                                                    </li>
+                                                    <li>
+                                                        <form method="POST" action="{{ url_for('company.update_application_status', app_id=app.id) }}" style="display:inline;">
+                                                            <input type="hidden" name="status" value="rejected">
+                                                            <button type="submit" class="dropdown-item">Reject</button>
+                                                        </form>
+                                                    </li>
+                                                    <li>
+                                                        <form method="POST" action="{{ url_for('company.update_application_status', app_id=app.id) }}" style="display:inline;">
+                                                            <input type="hidden" name="status" value="hired">
+                                                            <button type="submit" class="dropdown-item">Hire</button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center py-5">
+            <h5>No applications yet</h5>
+            <p>Applicants will appear here once they apply for this job.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

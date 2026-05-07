@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}{{ job.title }} - NextOffer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-5">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div>
+                            <h1 class="mb-2">{{ job.title }}</h1>
+                            <p class="text-muted mb-0">
+                                <i class="bi bi-building me-1"></i><strong>{{ job.company.company_name }}</strong>
+                            </p>
+                        </div>
+                        <span class="badge bg-primary fs-6">{{ job.job_type }}</span>
+                    </div>
+
+                    <hr>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p class="mb-3">
+                                <i class="bi bi-geo-alt me-2"></i><strong>Location:</strong> {{ job.location }}
+                            </p>
+                            <p class="mb-3">
+                                <i class="bi bi-clock me-2"></i><strong>Experience:</strong> {{ job.experience_required or 'Not specified' }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            {% if job.salary_min and job.salary_max %}
+                                <p class="mb-3">
+                                    <i class="bi bi-cash-coin me-2"></i><strong>Salary:</strong> ${{ "{:,.0f}".format(job.salary_min) }} - ${{ "{:,.0f}".format(job.salary_max) }}
+                                </p>
+                            {% endif %}
+                            {% if job.deadline %}
+                                <p class="mb-3">
+                                    <i class="bi bi-calendar me-2"></i><strong>Deadline:</strong> {{ job.deadline.strftime('%B %d, %Y') }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <h3 class="mb-3">Job Description</h3>
+                    <p class="mb-4">{{ job.description }}</p>
+
+                    {% if job.requirements %}
+                        <h3 class="mb-3">Requirements</h3>
+                        <p class="mb-4">{{ job.requirements }}</p>
+                    {% endif %}
+
+                    {% if job.skills_required %}
+                        <h3 class="mb-3">Required Skills</h3>
+                        <div class="mb-4">
+                            {% for skill in job.skills_required.split(',') %}
+                                <span class="badge bg-light text-dark me-2 mb-2">{{ skill.strip() }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 100px;">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Company Information</h5>
+                    {% if job.company.logo %}
+                        <img src="{{ url_for('static', filename='uploads/' + job.company.logo) }}" alt="{{ job.company.company_name }}" class="img-fluid mb-3" style="max-height: 100px;">
+                    {% else %}
+                        <div class="bg-light p-4 text-center mb-3 rounded">
+                            <i class="bi bi-building" style="font-size: 3rem; color: #ccc;"></i>
+                        </div>
+                    {% endif %}
+
+                    {% if job.company.description %}
+                        <p class="text-muted small mb-3">{{ job.company.description }}</p>
+                    {% endif %}
+
+                    {% if job.company.website %}
+                        <p class="mb-2">
+                            <i class="bi bi-globe me-2"></i>
+                            <a href="{{ job.company.website }}" target="_blank">{{ job.company.website }}</a>
+                        </p>
+                    {% endif %}
+
+                    {% if job.company.location %}
+                        <p class="mb-4">
+                            <i class="bi bi-geo-alt me-2"></i>{{ job.company.location }}
+                        </p>
+                    {% endif %}
+
+                    {% if current_user.is_authenticated and current_user.role == 'candidate' %}
+                        <a href="{{ url_for('candidate.apply_job', job_id=job.id) }}" class="btn btn-primary w-100">
+                            <i class="bi bi-send me-2"></i>Apply Now
+                        </a>
+                    {% elif current_user.is_authenticated and current_user.role == 'company' %}
+                        <p class="text-muted text-center">This is your job posting</p>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary w-100">
+                            Login to Apply
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Education - NextOffer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-9">
+            <h1 class="mb-4">Education</h1>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0">Add Education</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Degree</label>
+                                {{ form.degree(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Institution</label>
+                                {{ form.institution(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Field of Study</label>
+                                {{ form.field(class="form-control") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Start Year</label>
+                                {{ form.start_year(class="form-control") }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">End Year</label>
+                                {{ form.end_year(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Grade/GPA</label>
+                                {{ form.grade(class="form-control") }}
+                            </div>
+                        </div>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+
+            {% if education %}
+                <h4 class="mb-3">Your Education</h4>
+                <div class="row g-3">
+                    {% for edu in education %}
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title mb-1">{{ edu.degree }}</h5>
+                                            <p class="text-muted mb-2">{{ edu.institution }} {% if edu.field %}<span class="badge bg-light text-dark">{{ edu.field }}</span>{% endif %}</p>
+                                            <p class="text-muted small">
+                                                {% if edu.start_year %}{{ edu.start_year }}{% endif %}
+                                                {% if edu.end_year %} - {{ edu.end_year }}{% endif %}
+                                                {% if edu.grade %}<span class="ms-2">GPA: {{ edu.grade }}</span>{% endif %}
+                                            </p>
+                                        </div>
+                                        <div class="col-auto">
+                                            <form method="POST" action="{{ url_for('candidate.delete_education', edu_id=edu.id) }}" style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this entry?')">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">No education entries yet.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

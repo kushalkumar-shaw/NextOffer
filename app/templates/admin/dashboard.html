@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - NextOffer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Admin Dashboard</h1>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #2563EB 0%, #1e40af 100%); color: white;">
+                <div class="card-body">
+                    <h6 class="card-text opacity-75">Total Users</h6>
+                    <h3 class="mb-0">{{ stats.total_users }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">
+                <div class="card-body">
+                    <h6 class="card-text opacity-75">Candidates</h6>
+                    <h3 class="mb-0">{{ stats.total_candidates }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;">
+                <div class="card-body">
+                    <h6 class="card-text opacity-75">Companies</h6>
+                    <h3 class="mb-0">{{ stats.total_companies }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white;">
+                <div class="card-body">
+                    <h6 class="card-text opacity-75">Total Jobs</h6>
+                    <h3 class="mb-0">{{ stats.total_jobs }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-text text-muted">Active Jobs</h6>
+                    <h3 class="mb-0">{{ stats.active_jobs }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-text text-muted">Total Applications</h6>
+                    <h3 class="mb-0">{{ stats.total_applications }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-text text-muted">Recent Activity</h6>
+                    <p class="mb-0 text-success">
+                        <i class="bi bi-arrow-up"></i> 12% increase this month
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light border-bottom">
+            <h5 class="mb-0">Recent Applications</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Job</th>
+                            <th>Company</th>
+                            <th>Status</th>
+                            <th>Applied</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in recent_applications %}
+                            <tr>
+                                <td>{{ app.candidate.name }}</td>
+                                <td>{{ app.job.title }}</td>
+                                <td>{{ app.job.company.company_name }}</td>
+                                <td>
+                                    <span class="badge bg-{% if app.status == 'hired' %}success{% elif app.status == 'shortlisted' %}info{% elif app.status == 'rejected' %}danger{% else %}secondary{% endif %}">
+                                        {{ app.status }}
+                                    </span>
+                                </td>
+                                <td class="text-muted small">{{ app.applied_at.strftime('%b %d, %Y') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-4">
+        <div class="col-md-6">
+            <a href="{{ url_for('admin.users') }}" class="btn btn-outline-primary w-100">Manage Users</a>
+        </div>
+        <div class="col-md-6">
+            <a href="{{ url_for('admin.reports') }}" class="btn btn-outline-primary w-100">View Reports</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

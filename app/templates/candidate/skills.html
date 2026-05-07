@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Skills - NextOffer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Skills</h1>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-light border-bottom">
+            <h5 class="mb-0">Add Skill</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Skill</label>
+                        {{ form.skill_name(class="form-control", placeholder="e.g., Python, React, AWS") }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Proficiency</label>
+                        {{ form.proficiency(class="form-select") }}
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        {{ form.submit(class="btn btn-primary w-100") }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if skills %}
+        <h4 class="mb-3">Your Skills</h4>
+        <div class="row g-2">
+            {% for skill in skills %}
+                <div class="col-auto">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-primary">{{ skill.proficiency }}</span>
+                                <span>{{ skill.skill_name }}</span>
+                                <form method="POST" action="{{ url_for('candidate.delete_skill', skill_id=skill.id) }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-close" aria-label="Delete"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">No skills added yet.</div>
+    {% endif %}
+</div>
+{% endblock %}

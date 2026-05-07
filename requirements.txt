@@ -1,0 +1,10 @@
+Flask==3.1.0
+Flask-Login==0.6.3
+Flask-WTF==1.2.1
+Flask-SQLAlchemy==3.2.1
+Werkzeug==3.1.2
+ReportLab
+WTForms==3.1.1
+email-validator==2.2.0
+SQLAlchemy==2.1.5
+Jinja2==3.1.4
