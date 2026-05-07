@@ -5,11 +5,40 @@
 {% block content %}
 <div class="container py-5">
     <div class="row">
+        <div class="col-lg-3">
+            <div class="sidebar-nav">
+                <h6 style="margin-bottom: 1.5rem;">Profile Sections</h6>
+                <a href="{{ url_for('candidate.profile') }}" class="nav-link">
+                    <i class="bi bi-person me-2"></i>Personal Info
+                </a>
+                <a href="{{ url_for('candidate.education') }}" class="nav-link active">
+                    <i class="bi bi-book me-2"></i>Education
+                </a>
+                <a href="{{ url_for('candidate.experience') }}" class="nav-link">
+                    <i class="bi bi-briefcase me-2"></i>Experience
+                </a>
+                <a href="{{ url_for('candidate.skills') }}" class="nav-link">
+                    <i class="bi bi-star me-2"></i>Skills
+                </a>
+                <a href="{{ url_for('candidate.projects') }}" class="nav-link">
+                    <i class="bi bi-diagram-3 me-2"></i>Projects
+                </a>
+                <a href="{{ url_for('candidate.awards') }}" class="nav-link">
+                    <i class="bi bi-award me-2"></i>Awards
+                </a>
+                <a href="{{ url_for('candidate.dashboard') }}" class="nav-link" style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1rem;">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+
         <div class="col-lg-9">
-            <h1 class="mb-4">Education</h1>
+            <a href="{{ url_for('candidate.dashboard') }}" class="btn btn-outline-primary mb-3">
+                <i class="bi bi-arrow-left me-2"></i>Back
+            </a>
 
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-light border-bottom">
+                <div class="card-header">
                     <h5 class="mb-0">Add Education</h5>
                 </div>
                 <div class="card-body">
@@ -58,14 +87,16 @@
                                             <h5 class="card-title mb-1">{{ edu.degree }}</h5>
                                             <p class="text-muted mb-2">{{ edu.institution }} {% if edu.field %}<span class="badge bg-light text-dark">{{ edu.field }}</span>{% endif %}</p>
                                             <p class="text-muted small">
-                                                {% if edu.start_year %}{{ edu.start_year }}{% endif %}
+                                                {% if edu.start_year %}<i class="bi bi-calendar-event me-1"></i>{{ edu.start_year }}{% endif %}
                                                 {% if edu.end_year %} - {{ edu.end_year }}{% endif %}
-                                                {% if edu.grade %}<span class="ms-2">GPA: {{ edu.grade }}</span>{% endif %}
+                                                {% if edu.grade %}<span class="ms-2"><i class="bi bi-percent me-1"></i>GPA: {{ edu.grade }}</span>{% endif %}
                                             </p>
                                         </div>
                                         <div class="col-auto">
                                             <form method="POST" action="{{ url_for('candidate.delete_education', edu_id=edu.id) }}" style="display:inline;">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this entry?')">Delete</button>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this entry?')">
+                                                    <i class="bi bi-trash me-1"></i>Delete
+                                                </button>
                                             </form>
                                         </div>
                                     </div>
@@ -75,7 +106,9 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="alert alert-info">No education entries yet.</div>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>No education entries yet. Add your educational background to build a stronger profile.
+                </div>
             {% endif %}
         </div>
     </div>

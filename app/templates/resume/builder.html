@@ -5,44 +5,72 @@
 {% block content %}
 <div class="container-fluid py-5">
     <div class="container mb-5">
-        <h1 class="mb-2">Resume Builder</h1>
-        <p class="text-muted">Create and download your professional resume in minutes</p>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="mb-2">Resume Builder</h1>
+                <p class="text-muted">Create and download your professional resume in minutes</p>
+            </div>
+            <a href="{{ url_for('candidate.dashboard') }}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
     </div>
 
     <div class="container mb-5">
         <h4 class="mb-4">Select a Template</h4>
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm cursor-pointer hover-card" onclick="window.location.href='{{ url_for('resume.preview', template='classic') }}'">
+                <div class="card border-0 shadow-sm cursor-pointer hover-card h-100">
                     <div class="card-body text-center p-4">
                         <div class="bg-light p-5 mb-3 rounded">
-                            <i class="bi bi-file-earmark" style="font-size: 4rem; color: #0A1628;"></i>
+                            <i class="bi bi-file-earmark" style="font-size: 4rem; color: #054ADA;"></i>
                         </div>
                         <h5 class="card-title">Classic</h5>
                         <p class="card-text text-muted">Clean, professional, ATS-friendly</p>
-                        <a href="{{ url_for('resume.preview', template='classic') }}" class="btn btn-outline-primary btn-sm">Preview</a>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('resume.preview', template='classic') }}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-eye me-1"></i>Preview
+                            </a>
+                            <a href="{{ url_for('resume.download', template='classic') }}" class="btn btn-success btn-sm">
+                                <i class="bi bi-download me-1"></i>Download PDF
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm cursor-pointer hover-card" onclick="window.location.href='{{ url_for('resume.preview', template='modern') }}'">
+                <div class="card border-0 shadow-sm cursor-pointer hover-card h-100">
                     <div class="card-body text-center p-4">
-                        <div class="bg-light p-5 mb-3 rounded" style="background: linear-gradient(135deg, #2563EB 0%, #1e40af 100%);"></div>
+                        <div class="bg-light p-5 mb-3 rounded" style="background: linear-gradient(135deg, #054ADA 0%, #4267B2 100%);"></div>
                         <h5 class="card-title">Modern</h5>
                         <p class="card-text text-muted">Sidebar layout with color accent</p>
-                        <a href="{{ url_for('resume.preview', template='modern') }}" class="btn btn-outline-primary btn-sm">Preview</a>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('resume.preview', template='modern') }}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-eye me-1"></i>Preview
+                            </a>
+                            <a href="{{ url_for('resume.download', template='modern') }}" class="btn btn-success btn-sm">
+                                <i class="bi bi-download me-1"></i>Download PDF
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm cursor-pointer hover-card" onclick="window.location.href='{{ url_for('resume.preview', template='creative') }}'">
+                <div class="card border-0 shadow-sm cursor-pointer hover-card h-100">
                     <div class="card-body text-center p-4">
-                        <div class="bg-light p-5 mb-3 rounded" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);"></div>
+                        <div class="bg-light p-5 mb-3 rounded" style="background: linear-gradient(135deg, #FF9900 0%, #e68a00 100%);"></div>
                         <h5 class="card-title">Creative</h5>
                         <p class="card-text text-muted">Bold header with timeline layout</p>
-                        <a href="{{ url_for('resume.preview', template='creative') }}" class="btn btn-outline-primary btn-sm">Preview</a>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('resume.preview', template='creative') }}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-eye me-1"></i>Preview
+                            </a>
+                            <a href="{{ url_for('resume.download', template='creative') }}" class="btn btn-success btn-sm">
+                                <i class="bi bi-download me-1"></i>Download PDF
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -51,41 +79,44 @@
 
     <div class="container">
         <div class="card border-0 shadow-sm">
-            <div class="card-header bg-light">
-                <h5 class="mb-0">Your Profile Data</h5>
+            <div class="card-header" style="background: linear-gradient(135deg, #054ADA 0%, #4267B2 100%); color: white;">
+                <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Your Profile Data</h5>
             </div>
             <div class="card-body">
                 <div class="row g-4">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <strong>Name:</strong><br>
+                            <strong><i class="bi bi-person me-2" style="color: #054ADA;"></i>Name:</strong><br>
                             <span class="text-muted">{{ resume_data.name }}</span>
                         </div>
                         <div class="mb-3">
-                            <strong>Email:</strong><br>
+                            <strong><i class="bi bi-envelope me-2" style="color: #054ADA;"></i>Email:</strong><br>
                             <span class="text-muted">{{ resume_data.email }}</span>
                         </div>
                         <div class="mb-3">
-                            <strong>Phone:</strong><br>
+                            <strong><i class="bi bi-telephone me-2" style="color: #054ADA;"></i>Phone:</strong><br>
                             <span class="text-muted">{{ resume_data.phone or 'Not provided' }}</span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <strong>Location:</strong><br>
+                            <strong><i class="bi bi-geo-alt me-2" style="color: #054ADA;"></i>Location:</strong><br>
                             <span class="text-muted">{{ resume_data.location or 'Not provided' }}</span>
                         </div>
                         <div class="mb-3">
-                            <strong>Education Entries:</strong><br>
+                            <strong><i class="bi bi-book me-2" style="color: #054ADA;"></i>Education Entries:</strong><br>
                             <span class="text-muted">{{ resume_data.education|length }}</span>
                         </div>
                         <div class="mb-3">
-                            <strong>Experience Entries:</strong><br>
+                            <strong><i class="bi bi-briefcase me-2" style="color: #054ADA;"></i>Experience Entries:</strong><br>
                             <span class="text-muted">{{ resume_data.experience|length }}</span>
                         </div>
                     </div>
                 </div>
-                <a href="{{ url_for('candidate.profile') }}" class="btn btn-outline-primary">Update Profile</a>
+                <div class="divider"></div>
+                <a href="{{ url_for('candidate.profile') }}" class="btn btn-primary">
+                    <i class="bi bi-pencil me-2"></i>Update Profile
+                </a>
             </div>
         </div>
     </div>

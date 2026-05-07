@@ -11,8 +11,8 @@
 
     {% block extra_css %}{% endblock %}
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: linear-gradient(135deg, #0A1628 0%, #1a3a52 100%);">
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="{{ url_for('main.index') }}">
                 <i class="bi bi-briefcase-fill me-2"></i>NextOffer
@@ -57,7 +57,7 @@
         </div>
     </nav>
 
-    <main>
+    <main style="flex: 1;">
         <div class="container-fluid">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -74,7 +74,7 @@
         </div>
     </main>
 
-    <footer class="bg-dark text-white py-4 mt-5">
+    <footer class="bg-dark text-white py-4 mt-5" style="margin-top: auto;">
         <div class="container text-center">
             <p class="mb-2">&copy; 2024 NextOffer. All rights reserved.</p>
             <small>Connecting talent with opportunity.</small>

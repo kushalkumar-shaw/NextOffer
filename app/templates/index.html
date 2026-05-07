@@ -3,23 +3,27 @@
 {% block title %}NextOffer - Land Your Dream Job{% endblock %}
 
 {% block content %}
-<div class="hero-section py-5" style="background: linear-gradient(135deg, #0A1628 0%, #2563EB 100%);">
-    <div class="container py-5">
+<div class="hero-section py-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #e8f0ff 100%); position: relative; overflow: hidden;">
+    <!-- Decorative Elements -->
+    <div style="position: absolute; top: -50px; right: -50px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(5, 74, 218, 0.1) 0%, transparent 70%); border-radius: 50%;"></div>
+    <div style="position: absolute; bottom: -100px; left: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255, 153, 0, 0.08) 0%, transparent 70%); border-radius: 50%;"></div>
+
+    <div class="container py-5" style="position: relative; z-index: 1;">
         <div class="row align-items-center">
-            <div class="col-lg-6 text-white mb-4 mb-lg-0">
-                <h1 class="display-4 fw-bold mb-3">Land Your Dream Job</h1>
-                <p class="lead mb-4">Discover opportunities from top companies and showcase your skills to the world.</p>
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-3" style="color: #054ADA;">Land Your Dream Job</h1>
+                <p class="lead mb-4" style="color: #4267B2; font-size: 1.25rem;">Discover opportunities from top companies and showcase your skills to the world.</p>
                 {% if not current_user.is_authenticated %}
                     <div class="btn-group gap-3">
-                        <a href="{{ url_for('main.browse_jobs') }}" class="btn btn-light btn-lg">
+                        <a href="{{ url_for('main.browse_jobs') }}" class="btn btn-primary btn-lg">
                             <i class="bi bi-search me-2"></i>Find Jobs
                         </a>
-                        <a href="{{ url_for('auth.register_candidate') }}" class="btn btn-outline-light btn-lg">
+                        <a href="{{ url_for('auth.register_candidate') }}" class="btn btn-success btn-lg">
                             <i class="bi bi-person-plus me-2"></i>Join Now
                         </a>
                     </div>
                 {% else %}
-                    <a href="{{ url_for('main.browse_jobs') }}" class="btn btn-light btn-lg">
+                    <a href="{{ url_for('main.browse_jobs') }}" class="btn btn-primary btn-lg">
                         <i class="bi bi-search me-2"></i>Browse Jobs
                     </a>
                 {% endif %}
@@ -27,11 +31,12 @@
             <div class="col-lg-6">
                 <form class="search-form" method="get" action="{{ url_for('main.browse_jobs') }}" class="mb-0">
                     <div class="input-group input-group-lg">
-                        <input type="text" class="form-control" name="search" placeholder="Job title, keywords...">
-                        <button class="btn btn-warning" type="submit">
+                        <input type="text" class="form-control" name="search" placeholder="Job title, keywords..." style="border: 2px solid #054ADA;">
+                        <button class="btn btn-primary" type="submit">
                             <i class="bi bi-search"></i>Search
                         </button>
                     </div>
+                    <small class="text-muted d-block mt-2"><i class="bi bi-info-circle me-1"></i>Search across 100+ job listings</small>
                 </form>
             </div>
         </div>
@@ -43,7 +48,7 @@
         <h2 class="text-center mb-5">Platform Stats</h2>
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="card text-center border-0 shadow-sm" style="background: linear-gradient(135deg, #2563EB 0%, #1e40af 100%); color: white;">
+                <div class="card text-center border-0 shadow-sm" style="background: linear-gradient(135deg, #054ADA 0%, #4267B2 100%); color: white;">
                     <div class="card-body p-4">
                         <h3 class="card-title display-6">{{ total_jobs }}</h3>
                         <p class="card-text">Active Job Postings</p>
@@ -51,7 +56,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card text-center border-0 shadow-sm" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">
+                <div class="card text-center border-0 shadow-sm" style="background: linear-gradient(135deg, #FF9900 0%, #e68a00 100%); color: white;">
                     <div class="card-body p-4">
                         <h3 class="card-title display-6">{{ total_companies }}</h3>
                         <p class="card-text">Hiring Companies</p>
@@ -59,7 +64,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card text-center border-0 shadow-sm" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;">
+                <div class="card text-center border-0 shadow-sm" style="background: linear-gradient(135deg, #4267B2 0%, #054ADA 100%); color: white;">
                     <div class="card-body p-4">
                         <h3 class="card-title display-6">1000+</h3>
                         <p class="card-text">Success Stories</p>
