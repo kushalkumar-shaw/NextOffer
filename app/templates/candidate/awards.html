@@ -4,73 +4,112 @@
 
 {% block content %}
 <div class="container py-5">
-    <h1 class="mb-4">Awards & Achievements</h1>
-
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-light border-bottom">
-            <h5 class="mb-0">Add Award</h5>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="sidebar-nav">
+                <h6 style="margin-bottom: 1.5rem;">Profile Sections</h6>
+                <a href="{{ url_for('candidate.profile') }}" class="nav-link">
+                    <i class="bi bi-person me-2"></i>Personal Info
+                </a>
+                <a href="{{ url_for('candidate.education') }}" class="nav-link">
+                    <i class="bi bi-book me-2"></i>Education
+                </a>
+                <a href="{{ url_for('candidate.experience') }}" class="nav-link">
+                    <i class="bi bi-briefcase me-2"></i>Experience
+                </a>
+                <a href="{{ url_for('candidate.skills') }}" class="nav-link">
+                    <i class="bi bi-star me-2"></i>Skills
+                </a>
+                <a href="{{ url_for('candidate.projects') }}" class="nav-link">
+                    <i class="bi bi-diagram-3 me-2"></i>Projects
+                </a>
+                <a href="{{ url_for('candidate.awards') }}" class="nav-link active">
+                    <i class="bi bi-award me-2"></i>Awards
+                </a>
+                <a href="{{ url_for('candidate.dashboard') }}" class="nav-link" style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1rem;">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
         </div>
-        <div class="card-body">
-            <form method="POST">
-                {{ form.hidden_tag() }}
-                <div class="mb-3">
-                    <label class="form-label">Award Title</label>
-                    {{ form.title(class="form-control") }}
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Issuer/Organization</label>
-                        {{ form.issuer(class="form-control") }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Date</label>
-                        {{ form.date(class="form-control") }}
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Description</label>
-                    {{ form.description(class="form-control", rows="3") }}
-                </div>
-                {{ form.submit(class="btn btn-primary") }}
-            </form>
-        </div>
-    </div>
 
-    {% if awards %}
-        <h4 class="mb-3">Your Awards</h4>
-        <div class="row g-3">
-            {% for award in awards %}
-                <div class="col-12">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <h5 class="card-title">
-                                        <i class="bi bi-award me-2" style="color: #f59e0b;"></i>{{ award.title }}
-                                    </h5>
-                                    {% if award.issuer %}
-                                        <p class="text-muted mb-1">{{ award.issuer }}</p>
-                                    {% endif %}
-                                    {% if award.date %}
-                                        <p class="text-muted small mb-2">{{ award.date.strftime('%B %Y') }}</p>
-                                    {% endif %}
-                                    {% if award.description %}
-                                        <p class="card-text">{{ award.description }}</p>
-                                    {% endif %}
-                                </div>
-                                <div class="col-auto">
-                                    <form method="POST" action="{{ url_for('candidate.delete_award', award_id=award.id) }}" style="display:inline;">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this award?')">Delete</button>
-                                    </form>
+        <div class="col-lg-9">
+            <a href="{{ url_for('candidate.dashboard') }}" class="btn btn-outline-primary mb-3">
+                <i class="bi bi-arrow-left me-2"></i>Back
+            </a>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Add Award</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            <label class="form-label">Award Title</label>
+                            {{ form.title(class="form-control") }}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Issuer/Organization</label>
+                                {{ form.issuer(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Date</label>
+                                {{ form.date(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            {{ form.description(class="form-control", rows="3") }}
+                        </div>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+
+            {% if awards %}
+                <h4 class="mb-3">Your Awards</h4>
+                <div class="row g-3">
+                    {% for award in awards %}
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title">
+                                                <i class="bi bi-award me-2" style="color: #FF9900;"></i>{{ award.title }}
+                                            </h5>
+                                            {% if award.issuer %}
+                                                <p class="text-muted mb-1">{{ award.issuer }}</p>
+                                            {% endif %}
+                                            {% if award.date %}
+                                                <p class="text-muted small mb-2">
+                                                    <i class="bi bi-calendar-event me-1"></i>{{ award.date.strftime('%B %Y') }}
+                                                </p>
+                                            {% endif %}
+                                            {% if award.description %}
+                                                <p class="card-text">{{ award.description }}</p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-auto">
+                                            <form method="POST" action="{{ url_for('candidate.delete_award', award_id=award.id) }}" style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this award?')">
+                                                    <i class="bi bi-trash me-1"></i>Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>No awards added yet. Highlight your achievements and certifications.
+                </div>
+            {% endif %}
         </div>
-    {% else %}
-        <div class="alert alert-info">No awards added yet.</div>
-    {% endif %}
+    </div>
 </div>
 {% endblock %}

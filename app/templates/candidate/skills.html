@@ -4,53 +4,88 @@
 
 {% block content %}
 <div class="container py-5">
-    <h1 class="mb-4">Skills</h1>
-
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-light border-bottom">
-            <h5 class="mb-0">Add Skill</h5>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="sidebar-nav">
+                <h6 style="margin-bottom: 1.5rem;">Profile Sections</h6>
+                <a href="{{ url_for('candidate.profile') }}" class="nav-link">
+                    <i class="bi bi-person me-2"></i>Personal Info
+                </a>
+                <a href="{{ url_for('candidate.education') }}" class="nav-link">
+                    <i class="bi bi-book me-2"></i>Education
+                </a>
+                <a href="{{ url_for('candidate.experience') }}" class="nav-link">
+                    <i class="bi bi-briefcase me-2"></i>Experience
+                </a>
+                <a href="{{ url_for('candidate.skills') }}" class="nav-link active">
+                    <i class="bi bi-star me-2"></i>Skills
+                </a>
+                <a href="{{ url_for('candidate.projects') }}" class="nav-link">
+                    <i class="bi bi-diagram-3 me-2"></i>Projects
+                </a>
+                <a href="{{ url_for('candidate.awards') }}" class="nav-link">
+                    <i class="bi bi-award me-2"></i>Awards
+                </a>
+                <a href="{{ url_for('candidate.dashboard') }}" class="nav-link" style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1rem;">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
         </div>
-        <div class="card-body">
-            <form method="POST">
-                {{ form.hidden_tag() }}
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Skill</label>
-                        {{ form.skill_name(class="form-control", placeholder="e.g., Python, React, AWS") }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Proficiency</label>
-                        {{ form.proficiency(class="form-select") }}
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        {{ form.submit(class="btn btn-primary w-100") }}
-                    </div>
+
+        <div class="col-lg-9">
+            <a href="{{ url_for('candidate.dashboard') }}" class="btn btn-outline-primary mb-3">
+                <i class="bi bi-arrow-left me-2"></i>Back
+            </a>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Add Skill</h5>
                 </div>
-            </form>
-        </div>
-    </div>
-
-    {% if skills %}
-        <h4 class="mb-3">Your Skills</h4>
-        <div class="row g-2">
-            {% for skill in skills %}
-                <div class="col-auto">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body p-2">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary">{{ skill.proficiency }}</span>
-                                <span>{{ skill.skill_name }}</span>
-                                <form method="POST" action="{{ url_for('candidate.delete_skill', skill_id=skill.id) }}" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-close" aria-label="Delete"></button>
-                                </form>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Skill</label>
+                                {{ form.skill_name(class="form-control", placeholder="e.g., Python, React, AWS") }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Proficiency</label>
+                                {{ form.proficiency(class="form-select") }}
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                {{ form.submit(class="btn btn-primary w-100") }}
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
-            {% endfor %}
+            </div>
+
+            {% if skills %}
+                <h4 class="mb-3">Your Skills</h4>
+                <div class="row g-2">
+                    {% for skill in skills %}
+                        <div class="col-auto">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="badge bg-primary">{{ skill.proficiency }}</span>
+                                        <span>{{ skill.skill_name }}</span>
+                                        <form method="POST" action="{{ url_for('candidate.delete_skill', skill_id=skill.id) }}" style="display:inline;">
+                                            <button type="submit" class="btn btn-sm btn-close" aria-label="Delete"></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>No skills added yet. Add your technical and professional skills.
+                </div>
+            {% endif %}
         </div>
-    {% else %}
-        <div class="alert alert-info">No skills added yet.</div>
-    {% endif %}
+    </div>
 </div>
 {% endblock %}
