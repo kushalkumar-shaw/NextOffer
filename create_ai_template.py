@@ -1,0 +1,537 @@
+#!/usr/bin/env python3
+"""Setup script to create necessary directories and files for AI chatbot feature."""
+
+import os
+
+# Get the project root directory
+project_root = os.path.dirname(os.path.abspath(__file__))
+ai_templates_dir = os.path.join(project_root, "app", "templates", "ai")
+
+# Create the directory
+os.makedirs(ai_templates_dir, exist_ok=True)
+print(f"✓ Created directory: {ai_templates_dir}")
+
+# Create the chatbot template HTML file
+chatbot_template_content = '''{% extends "base.html" %}
+
+{% block title %}AI Career Chatbot - NextOffer{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 120px);
+        max-width: 800px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .chat-header {
+        background: linear-gradient(135deg, #0A1628 0%, #2563EB 100%);
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .chat-header-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .chat-header-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .chat-header-avatar i {
+        font-size: 24px;
+    }
+
+    .chat-header-info h5 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .chat-header-info p {
+        margin: 0;
+        font-size: 13px;
+        opacity: 0.9;
+    }
+
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .message {
+        display: flex;
+        gap: 10px;
+        animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .message.user {
+        justify-content: flex-end;
+    }
+
+    .message-bubble {
+        max-width: 70%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        word-wrap: break-word;
+        line-height: 1.5;
+    }
+
+    .message.user .message-bubble {
+        background: #2563EB;
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+
+    .message.assistant .message-bubble {
+        background: #e5e7eb;
+        color: #1f2937;
+        border-bottom-left-radius: 4px;
+    }
+
+    .message-bubble strong {
+        font-weight: 600;
+    }
+
+    .message-bubble ul, .message-bubble ol {
+        margin: 8px 0;
+        padding-left: 20px;
+    }
+
+    .message-bubble li {
+        margin: 4px 0;
+    }
+
+    .typing-indicator {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        padding: 12px 16px;
+        background: #e5e7eb;
+        border-radius: 18px;
+        width: fit-content;
+    }
+
+    .typing-dot {
+        width: 8px;
+        height: 8px;
+        background: #6b7280;
+        border-radius: 50%;
+        animation: typing 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+        0%, 60%, 100% {
+            transform: translateY(0);
+            opacity: 0.5;
+        }
+        30% {
+            transform: translateY(-10px);
+            opacity: 1;
+        }
+    }
+
+    .greeting-message {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6b7280;
+        font-size: 15px;
+    }
+
+    .greeting-message p {
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .chat-input-area {
+        border-top: 1px solid #e5e7eb;
+        padding: 15px;
+        background: #f9fafb;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .chat-input-area input {
+        flex: 1;
+        border: 1px solid #d1d5db;
+        border-radius: 24px;
+        padding: 10px 16px;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .chat-input-area input:focus {
+        border-color: #2563EB;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .send-btn {
+        background: #2563EB;
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+
+    .send-btn:hover {
+        background: #1d4ed8;
+        transform: scale(1.05);
+    }
+
+    .send-btn:active {
+        transform: scale(0.95);
+    }
+
+    .send-btn:disabled {
+        background: #d1d5db;
+        cursor: not-allowed;
+        transform: scale(1);
+    }
+
+    .quick-replies {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding: 0 15px 10px;
+    }
+
+    .quick-reply-btn {
+        background: white;
+        border: 1px solid #d1d5db;
+        border-radius: 20px;
+        padding: 8px 14px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .quick-reply-btn:hover {
+        background: #f3f4f6;
+        border-color: #2563EB;
+        color: #2563EB;
+    }
+
+    .error-message {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 12px 16px;
+        border-radius: 8px;
+        border-left: 4px solid #dc2626;
+        margin: 10px 0;
+    }
+
+    /* Scrollbar styling */
+    .chat-messages::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .chat-messages::-webkit-scrollbar-track {
+        background: #f1f5f9;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+
+    @media (max-width: 768px) {
+        .chat-container {
+            height: calc(100vh - 100px);
+        }
+
+        .message-bubble {
+            max-width: 90%;
+        }
+
+        .chat-header h5 {
+            font-size: 16px;
+        }
+
+        .quick-replies {
+            flex-direction: column;
+        }
+
+        .quick-reply-btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="chat-container">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="chat-header-avatar">
+                {% if profile_pic %}
+                    <img src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile">
+                {% else %}
+                    <i class="bi bi-person-circle"></i>
+                {% endif %}
+            </div>
+            <div class="chat-header-info">
+                <h5>Career Advisor</h5>
+                <p>Hi {{ name }}, I know your profile</p>
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="greeting-message">
+                <p><strong>Hello {{ name }}! 👋</strong></p>
+                <p>I'm your personalized AI career advisor. I know your profile, skills, education, and experience.</p>
+                <p style="margin-top: 15px;">Ask me anything about your career, job opportunities, resume tips, or how to grow professionally!</p>
+            </div>
+        </div>
+
+        <!-- Quick Replies -->
+        <div class="quick-replies" id="quickReplies">
+            <button class="quick-reply-btn" onclick="quickReply('Review my profile')">Review my profile</button>
+            <button class="quick-reply-btn" onclick="quickReply('What jobs suit me?')">What jobs suit me?</button>
+            <button class="quick-reply-btn" onclick="quickReply('How can I improve my resume?')">How can I improve my resume?</button>
+        </div>
+
+        <!-- Chat Input Area -->
+        <div class="chat-input-area">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    placeholder="Type your message..."
+                    onkeypress="handleKeyPress(event)"
+                    autocomplete="off"
+                >
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                    <i class="bi bi-send-fill"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Store conversation history
+    let conversationHistory = [];
+    const MAX_HISTORY = 20; // Last 10 turns (20 messages)
+
+    function showGreeting() {
+        const messagesDiv = document.getElementById('chatMessages');
+        messagesDiv.innerHTML = `
+            <div class="greeting-message">
+                <p><strong>Hello {{ name }}! 👋</strong></p>
+                <p>I'm your personalized AI career advisor. I know your profile, skills, education, and experience.</p>
+                <p style="margin-top: 15px;">Ask me anything about your career, job opportunities, resume tips, or how to grow professionally!</p>
+            </div>
+        `;
+    }
+
+    function renderMarkdown(text) {
+        // Escape HTML
+        text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        
+        // Convert markdown to HTML
+        text = text.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>'); // Bold
+        text = text.replace(/\\n/g, '<br>'); // Line breaks
+        
+        // Handle bullet points
+        text = text.replace(/^[\\*\\-]\\s+(.*?)(?=<br>|$)/gm, '<li>$1</li>');
+        text = text.replace(/(<li>.*?<\\/li>)/s, '<ul>$1</ul>');
+        
+        return text;
+    }
+
+    function appendMessage(role, content) {
+        const messagesDiv = document.getElementById('chatMessages');
+        
+        // Remove greeting if this is the first real message
+        if (conversationHistory.length === 0) {
+            messagesDiv.innerHTML = '';
+        }
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', role);
+        
+        const bubble = document.createElement('div');
+        bubble.classList.add('message-bubble');
+        
+        if (role === 'assistant') {
+            bubble.innerHTML = renderMarkdown(content);
+        } else {
+            bubble.textContent = content;
+        }
+        
+        messageDiv.appendChild(bubble);
+        messagesDiv.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+        const messagesDiv = document.getElementById('chatMessages');
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', 'assistant');
+        messageDiv.id = 'typingIndicator';
+        
+        const bubble = document.createElement('div');
+        bubble.classList.add('typing-indicator');
+        bubble.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+        
+        messageDiv.appendChild(bubble);
+        messagesDiv.appendChild(messageDiv);
+        
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+        const indicator = document.getElementById('typingIndicator');
+        if (indicator) {
+            indicator.remove();
+        }
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    }
+
+    function quickReply(message) {
+        document.getElementById('messageInput').value = message;
+        sendMessage();
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById('messageInput');
+        const message = input.value.trim();
+        
+        if (!message) return;
+        
+        const sendBtn = document.getElementById('sendBtn');
+        sendBtn.disabled = true;
+        
+        // Add user message to history and UI
+        conversationHistory.push({
+            role: 'user',
+            content: message
+        });
+        appendMessage('user', message);
+        
+        // Clear input and hide quick replies
+        input.value = '';
+        document.getElementById('quickReplies').style.display = 'none';
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        try {
+            const response = await fetch('{{ url_for("ai.send_message") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    history: conversationHistory.slice(-MAX_HISTORY)
+                })
+            });
+            
+            const data = await response.json();
+            
+            removeTypingIndicator();
+            
+            if (response.ok) {
+                const aiReply = data.reply;
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: aiReply
+                });
+                appendMessage('assistant', aiReply);
+            } else {
+                appendMessage('assistant', `Error: ${data.error || 'Failed to get response'}`);
+            }
+        } catch (error) {
+            removeTypingIndicator();
+            appendMessage('assistant', `Error: ${error.message}`);
+        } finally {
+            sendBtn.disabled = false;
+            input.focus();
+        }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        showGreeting();
+        document.getElementById('messageInput').focus();
+    });
+</script>
+{% endblock %}
+'''
+
+chatbot_template_path = os.path.join(ai_templates_dir, "chatbot.html")
+with open(chatbot_template_path, 'w', encoding='utf-8') as f:
+    f.write(chatbot_template_content)
+print(f"✓ Created template: {chatbot_template_path}")
+
+print("\n✓ AI chatbot setup completed successfully!")

@@ -14,8 +14,9 @@ def create_app(config_name=None):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
 
-    # Ensure upload folder exists
+    # Ensure upload and AI templates folders exist
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    os.makedirs(os.path.join(app.template_folder, 'ai'), exist_ok=True)
 
     # Initialize extensions
     db.init_app(app)
@@ -34,6 +35,7 @@ def create_app(config_name=None):
     from app.routes.admin import admin_bp
     from app.routes.resume import resume_bp
     from app.routes.main import main_bp
+    from app.routes.ai import ai_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(candidate_bp)
@@ -41,6 +43,7 @@ def create_app(config_name=None):
     app.register_blueprint(admin_bp)
     app.register_blueprint(resume_bp)
     app.register_blueprint(main_bp)
+    app.register_blueprint(ai_bp)
 
     # Create tables and seed data
     with app.app_context():
